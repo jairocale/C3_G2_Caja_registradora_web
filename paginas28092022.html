@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+
+            function square(num){
+                let resultado = num*num;
+
+                return resultado;
+            }
+
+            function cuadratica(a,b,c){
+                let x1 = (-(b) + Math.sqrt((b*b) - (4*a*c)))/(2*a);
+                let x2 = (-(b) - Math.sqrt((b*b) - (4*a*c)))/(2*a);
+                return [x1, x2];
+                
+            }
+
+
+
+        </script>
+        
+
+    </head>
+
+    <body>
+
+        <p>
+            ...
+        </p>
+        <script>
+            //alert ("texto");
+            //consola.log("texto");
+            //var n = prompt("Digite un valor entero:");
+
+            //var cuadrado = square(5);
+            //document.write(cuadrado);
+
+            var valores = cuadratica(1,-10,25);
+            document.write("x1 = " + valores[0]+"<br>");
+            document.write("x2 = " + valores[1]+"<br>");
+        </script>
+
+    </body>
+        
+</html>
