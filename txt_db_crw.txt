@@ -1,0 +1,119 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema Caja_reg_web
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema Caja_reg_web
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `Caja_reg_web` DEFAULT CHARACTER SET utf8 ;
+USE `Caja_reg_web` ;
+
+-- -----------------------------------------------------
+-- Table `Caja_reg_web`.`Proveedor`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Caja_reg_web`.`Proveedor` (
+  `Codigo_prv` INT NOT NULL AUTO_INCREMENT,
+  `Nombre_prv` VARCHAR(45) NOT NULL,
+  `Contacto_prv` VARCHAR(45) NOT NULL,
+  `Tel_prv` INT NULL,
+  `Direccion_prv` VARCHAR(45) NULL,
+  `Ciudad_prv` VARCHAR(45) NULL,
+  PRIMARY KEY (`Codigo_prv`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Caja_reg_web`.`Fabricante`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Caja_reg_web`.`Fabricante` (
+  `Codigo_fab` INT NOT NULL AUTO_INCREMENT,
+  `Nombre_fab` VARCHAR(45) NOT NULL,
+  `Contacto_fab` VARCHAR(45) NOT NULL,
+  `Tel_fab` INT NOT NULL,
+  `Direccion_fab` VARCHAR(45) NOT NULL,
+  `Ciudad_prv` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`Codigo_fab`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Caja_reg_web`.`Operador`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Caja_reg_web`.`Operador` (
+  `Codigo_ope` INT NOT NULL,
+  `Nombre_ope` VARCHAR(45) NOT NULL,
+  `Nivel_ope` INT NOT NULL,
+  `Clave_ope` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`Codigo_ope`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Caja_reg_web`.`Producto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Caja_reg_web`.`Producto` (
+  `Codigo_pro` INT NOT NULL AUTO_INCREMENT,
+  `Categoria_pro` VARCHAR(50) NOT NULL,
+  `Nombre_pro` VARCHAR(50) NOT NULL,
+  `Valor_compra_pro` DOUBLE NOT NULL,
+  `Valor_venta_pro` DOUBLE NOT NULL,
+  `Cantidad_pro` INT NOT NULL,
+  `Codigo_prv` INT NOT NULL,
+  `Fabricante_Codigo_fab` INT NOT NULL,
+  `Operador_Codigo_ope` INT NOT NULL,
+  PRIMARY KEY (`Codigo_pro`),
+  INDEX `fk_Producto_Proveedor_idx` (`Codigo_prv` ASC) VISIBLE,
+  INDEX `fk_Producto_Fabricante1_idx` (`Fabricante_Codigo_fab` ASC),
+  INDEX `fk_Producto_Operador1_idx` (`Operador_Codigo_ope` ASC),
+  CONSTRAINT `fk_Producto_Proveedor`
+    FOREIGN KEY (`Codigo_prv`)
+    REFERENCES `Caja_reg_web`.`Proveedor` (`Codigo_prv`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Producto_Fabricante1`
+    FOREIGN KEY (`Fabricante_Codigo_fab`)
+    REFERENCES `Caja_reg_web`.`Fabricante` (`Codigo_fab`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Producto_Operador1`
+    FOREIGN KEY (`Operador_Codigo_ope`)
+    REFERENCES `Caja_reg_web`.`Operador` (`Codigo_ope`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Caja_reg_web`.`Ventas`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Caja_reg_web`.`Ventas` (
+  `Cliente_ven` VARCHAR(45) NOT NULL,
+  `Fecha_ven` DATE NOT NULL,
+  `Valor_ven` DOUBLE NOT NULL,
+  `Codigo_ope` INT NOT NULL,
+  `Codigo_pro` INT NOT NULL,
+  PRIMARY KEY (`Cliente_ven`),
+  INDEX `fk_Ventas_Administradores1_idx` (`Codigo_ope` ASC),
+  INDEX `fk_Ventas_Producto1_idx` (`Codigo_pro` ASC),
+  CONSTRAINT `fk_Ventas_Administradores1`
+    FOREIGN KEY (`Codigo_ope`)
+    REFERENCES `Caja_reg_web`.`Operador` (`Codigo_ope`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Ventas_Producto1`
+    FOREIGN KEY (`Codigo_pro`)
+    REFERENCES `Caja_reg_web`.`Producto` (`Codigo_pro`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
